@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Food Delivery',
-      debugShowModeBanner: false,
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const Scaffold(
         body: Center(child: Text('Design system wired ✅')),
