@@ -11,6 +11,9 @@ import '../widgets/product_card.dart';
 import '../widgets/category_chip.dart';
 import '../widgets/search_bar_widget.dart';
 
+// NEW IMPORT
+import '../../product_details/screens/product_details_screen.dart';
+
 class ProductListScreen extends ConsumerWidget {
   const ProductListScreen({super.key});
 
@@ -48,6 +51,7 @@ class ProductListScreen extends ConsumerWidget {
                     final category = allCategories[index];
                     final label =
                         category == 'all' ? 'All' : category.toTitleCase();
+
                     return CategoryChip(
                       label: label,
                       isSelected: selectedCategory == category,
@@ -75,6 +79,7 @@ class ProductListScreen extends ConsumerWidget {
                     icon: Icons.search_off,
                   );
                 }
+
                 return GridView.builder(
                   padding: const EdgeInsets.all(16),
                   gridDelegate:
@@ -87,10 +92,16 @@ class ProductListScreen extends ConsumerWidget {
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     final product = products[index];
+
                     return ProductCard(
                       product: product,
                       onTap: () {
-                        // Navigation to product details wired in Step 7
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                ProductDetailsScreen(product: product),
+                          ),
+                        );
                       },
                     );
                   },
