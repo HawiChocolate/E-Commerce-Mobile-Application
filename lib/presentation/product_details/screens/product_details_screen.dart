@@ -30,6 +30,9 @@ class _ProductDetailsScreenState
   bool _descriptionExpanded = false;
   int _quantity = 1;
 
+  // Loading state for Add to Cart
+  bool _isAddingToCart = false;
+
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
@@ -94,7 +97,6 @@ class _ProductDetailsScreenState
                             child: CachedNetworkImage(
                               imageUrl: product.image,
                               fit: BoxFit.contain,
-
                               placeholder:
                                   (context, url) {
                                 return const Center(
@@ -104,7 +106,6 @@ class _ProductDetailsScreenState
                                   ),
                                 );
                               },
-
                               errorWidget:
                                   (context, url, error) {
                                 return const Icon(
@@ -137,7 +138,6 @@ class _ProductDetailsScreenState
                               top: Radius.circular(28),
                             ),
                           ),
-
                           child: Column(
                             crossAxisAlignment:
                                 CrossAxisAlignment.start,
@@ -155,12 +155,7 @@ class _ProductDetailsScreenState
                                       product.title,
                                       style: AppTextStyles
                                           .headingMedium,
-
-                                      // Limit title
-                                      // to two lines
                                       maxLines: 2,
-
-                                      // Add ... if too long
                                       overflow:
                                           TextOverflow.ellipsis,
                                     ),
@@ -234,10 +229,8 @@ class _ProductDetailsScreenState
                                         : 3,
                                 overflow:
                                     _descriptionExpanded
-                                        ? TextOverflow
-                                            .visible
-                                        : TextOverflow
-                                            .ellipsis,
+                                        ? TextOverflow.visible
+                                        : TextOverflow.ellipsis,
                               ),
 
                               // =========================
@@ -309,29 +302,61 @@ class _ProductDetailsScreenState
               const SizedBox(width: 16),
 
               // =========================
-              // ADD TO CART
+              // ADD TO CART BUTTON
               // =========================
               Expanded(
                 child: AppButton(
                   label: 'Add to cart',
 
-                  onPressed: () async {
-                    await ref
-                        .read(cartProvider.notifier)
-                        .addToCart(
-                          product,
-                          quantity: _quantity,
-                        );
+                  // Show loading indicator
+                  isLoading: _isAddingToCart,
 
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            '${product.title} added to cart',
+                  onPressed: () async {
+                    // Prevent multiple taps
+                    if (_isAddingToCart) return;
+
+                    // Start loading
+                    setState(() {
+                      _isAddingToCart = true;
+                    });
+
+                    try {
+                      await ref
+                          .read(cartProvider.notifier)
+                          .addToCart(
+                            product,
+                            quantity: _quantity,
+                          );
+
+                      if (mounted) {
+                        setState(() {
+                          _isAddingToCart = false;
+                        });
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              '${product.title} added to cart',
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
+                    } catch (e) {
+                      if (mounted) {
+                        setState(() {
+                          _isAddingToCart = false;
+                        });
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Failed to add product to cart',
+                            ),
+                          ),
+                        );
+                      }
                     }
                   },
                 ),
@@ -355,12 +380,10 @@ class _ProductDetailsScreenState
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(10),
-
         decoration: const BoxDecoration(
           color: AppColors.surface,
           shape: BoxShape.circle,
         ),
-
         child: Icon(
           icon,
           size: 20,
@@ -378,7 +401,7 @@ class _ProductDetailsScreenState
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Decrease
+        // Decrease quantity
         _stepButton(
           icon: Icons.remove,
           onTap: () {
@@ -402,7 +425,7 @@ class _ProductDetailsScreenState
           ),
         ),
 
-        // Increase
+        // Increase quantity
         _stepButton(
           icon: Icons.add,
           isAccent: true,
@@ -429,14 +452,12 @@ class _ProductDetailsScreenState
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(6),
-
         decoration: BoxDecoration(
           color: isAccent
               ? AppColors.accent
               : AppColors.background,
           shape: BoxShape.circle,
         ),
-
         child: Icon(
           icon,
           size: 16,
