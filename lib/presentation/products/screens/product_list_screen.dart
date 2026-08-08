@@ -15,7 +15,6 @@ import '../widgets/product_card.dart';
 import '../widgets/category_chip.dart';
 import '../widgets/search_bar_widget.dart';
 
-// Product details screen
 import '../../product_details/screens/product_details_screen.dart';
 
 class ProductListScreen extends ConsumerWidget {
@@ -39,35 +38,48 @@ class ProductListScreen extends ConsumerWidget {
 
       body: Column(
         children: [
-          // Search bar
+          // =========================
+          // SEARCH BAR
+          // =========================
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
             child: const SearchBarWidget(),
           ),
 
           const SizedBox(height: 14),
 
-          // Categories
+          // =========================
+          // CATEGORIES
+          // =========================
           SizedBox(
             height: 44,
             child: categoriesAsync.when(
               loading: () => const SizedBox.shrink(),
 
-              error: (_, __) => const SizedBox.shrink(),
+              error: (_, __) =>
+                  const SizedBox.shrink(),
 
               data: (categories) {
-                final allCategories = ['all', ...categories];
+                final allCategories = [
+                  'all',
+                  ...categories,
+                ];
 
                 return ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
                   itemCount: allCategories.length,
 
                   separatorBuilder: (_, __) =>
                       const SizedBox(width: 10),
 
                   itemBuilder: (context, index) {
-                    final category = allCategories[index];
+                    final category =
+                        allCategories[index];
 
                     final label = category == 'all'
                         ? 'All'
@@ -75,12 +87,14 @@ class ProductListScreen extends ConsumerWidget {
 
                     return CategoryChip(
                       label: label,
-                      isSelected: selectedCategory == category,
+                      isSelected:
+                          selectedCategory == category,
 
                       onTap: () {
                         ref
                             .read(
-                              selectedCategoryProvider.notifier,
+                              selectedCategoryProvider
+                                  .notifier,
                             )
                             .state = category;
                       },
@@ -93,37 +107,57 @@ class ProductListScreen extends ConsumerWidget {
 
           const SizedBox(height: 10),
 
-          // Products
+          // =========================
+          // PRODUCT LIST
+          // =========================
           Expanded(
             child: filteredProducts.when(
               // Loading
               loading: () => const LoadingWidget(),
 
               // Error
-              error: (error, stack) => ErrorStateWidget(
-                message: error.toString(),
-                onRetry: () {
-                  ref.invalidate(allProductsProvider);
-                },
-              ),
+              error: (error, stack) {
+                return ErrorStateWidget(
+                  message: error.toString(),
+                  onRetry: () {
+                    ref.invalidate(
+                      allProductsProvider,
+                    );
+                  },
+                );
+              },
 
-              // Data
+              // Products loaded
               data: (products) {
+                // =========================
+                // EMPTY STATE
+                // =========================
                 if (products.isEmpty) {
-                  return const EmptyStateWidget(
-                    message: 'No products found.',
+                  final query =
+                      ref.watch(searchQueryProvider);
+
+                  final message = query.isNotEmpty
+                      ? 'No results for "$query"'
+                      : 'No products in this category';
+
+                  return EmptyStateWidget(
+                    message: message,
                     icon: Icons.search_off,
                   );
                 }
 
+                // =========================
+                // PRODUCT GRID
+                // =========================
                 return GridView.builder(
                   padding: const EdgeInsets.all(16),
 
-                  // RESPONSIVE GRID
                   gridDelegate:
                       SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount:
-                        Responsive.productGridColumns(context),
+                        Responsive.productGridColumns(
+                      context,
+                    ),
                     mainAxisSpacing: 14,
                     crossAxisSpacing: 14,
                     childAspectRatio: 0.68,
