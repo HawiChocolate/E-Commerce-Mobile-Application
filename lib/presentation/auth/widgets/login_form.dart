@@ -37,17 +37,33 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Username', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textPrimary)),
-          const SizedBox(height: 6),
+          Text(
+            'Username',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
           TextFormField(
             controller: _usernameController,
             validator: (value) =>
                 (value == null || value.trim().isEmpty) ? 'Username is required' : null,
-            decoration: const InputDecoration(hintText: 'Enter username'),
+            decoration: InputDecoration(
+              hintText: 'Enter username',
+              prefixIcon: const Icon(Icons.person_outline, color: AppColors.textSecondary),
+              fillColor: AppColors.background.withOpacity(0.5),
+            ),
           ),
-          const SizedBox(height: 16),
-          Text('Password', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textPrimary)),
-          const SizedBox(height: 6),
+          const SizedBox(height: 18),
+          Text(
+            'Password',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
           TextFormField(
             controller: _passwordController,
             obscureText: _obscurePassword,
@@ -55,13 +71,18 @@ class _LoginFormState extends State<LoginForm> {
                 (value == null || value.isEmpty) ? 'Password is required' : null,
             decoration: InputDecoration(
               hintText: 'Enter password',
+              fillColor: AppColors.background.withOpacity(0.5),
+              prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textSecondary),
               suffixIcon: IconButton(
-                icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  color: AppColors.textSecondary,
+                ),
                 onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
               ),
             ),
           ),
-          const SizedBox(height: 28),
+          const SizedBox(height: 30),
           AppButton(
             label: 'Login',
             isLoading: widget.isLoading,
