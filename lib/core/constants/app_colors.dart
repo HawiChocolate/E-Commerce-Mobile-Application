@@ -16,7 +16,7 @@ class AppColors {
 
   // Text
   static const Color textPrimary = Color(0xFF212121);
-  static const Color textSecondary = Color(0xFF8D8D8D);
+  static const Color textSecondary = Color.fromARGB(255, 6, 6, 6);
   static const Color textOnPrimary = Color(0xFFFFFFFF); // text on black buttons
 
   // Status
