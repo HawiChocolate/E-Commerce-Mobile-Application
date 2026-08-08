@@ -10,7 +10,6 @@ import '../../../data/models/product_model.dart';
 import '../../common/widgets/app_button.dart';
 import '../../common/widgets/rating_badge.dart';
 
-// Cart provider
 import '../../cart/providers/cart_providers.dart';
 
 class ProductDetailsScreen extends ConsumerStatefulWidget {
@@ -37,21 +36,27 @@ class _ProductDetailsScreenState
 
     return Scaffold(
       backgroundColor: AppColors.background,
+
       body: SafeArea(
         child: Column(
           children: [
-            // Custom app bar
+            // =========================
+            // CUSTOM APP BAR
+            // =========================
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 8,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                 children: [
                   _circleIconButton(
                     icon: Icons.arrow_back,
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
 
                   Text(
@@ -67,7 +72,9 @@ class _ProductDetailsScreenState
               ),
             ),
 
-            // Product details content
+            // =========================
+            // PRODUCT DETAILS
+            // =========================
             Expanded(
               child: SingleChildScrollView(
                 child: Center(
@@ -77,7 +84,9 @@ class _ProductDetailsScreenState
                     ),
                     child: Column(
                       children: [
-                        // Product image
+                        // =========================
+                        // PRODUCT IMAGE
+                        // =========================
                         Padding(
                           padding: const EdgeInsets.all(24),
                           child: AspectRatio(
@@ -85,53 +94,79 @@ class _ProductDetailsScreenState
                             child: CachedNetworkImage(
                               imageUrl: product.image,
                               fit: BoxFit.contain,
-                              placeholder: (context, url) =>
-                                  const Center(
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
+
+                              placeholder:
+                                  (context, url) {
+                                return const Center(
+                                  child:
+                                      CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                );
+                              },
+
                               errorWidget:
-                                  (context, url, error) =>
-                                      const Icon(
-                                Icons.broken_image_outlined,
-                                size: 64,
-                              ),
+                                  (context, url, error) {
+                                return const Icon(
+                                  Icons
+                                      .broken_image_outlined,
+                                  size: 64,
+                                );
+                              },
                             ),
                           ),
                         ),
 
-                        // Product information
+                        // =========================
+                        // PRODUCT INFORMATION
+                        // =========================
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.fromLTRB(
+                          padding:
+                              const EdgeInsets.fromLTRB(
                             20,
                             28,
                             20,
                             20,
                           ),
-                          decoration: const BoxDecoration(
+                          decoration:
+                              const BoxDecoration(
                             color: AppColors.surface,
-                            borderRadius: BorderRadius.vertical(
+                            borderRadius:
+                                BorderRadius.vertical(
                               top: Radius.circular(28),
                             ),
                           ),
+
                           child: Column(
                             crossAxisAlignment:
                                 CrossAxisAlignment.start,
                             children: [
-                              // Product title + quantity
+                              // =========================
+                              // TITLE + QUANTITY
+                              // =========================
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment
+                                        .spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Text(
                                       product.title,
-                                      style:
-                                          AppTextStyles.headingMedium,
+                                      style: AppTextStyles
+                                          .headingMedium,
+
+                                      // Limit title
+                                      // to two lines
+                                      maxLines: 2,
+
+                                      // Add ... if too long
+                                      overflow:
+                                          TextOverflow.ellipsis,
                                     ),
                                   ),
+
+                                  const SizedBox(width: 12),
 
                                   _quantityStepper(),
                                 ],
@@ -139,28 +174,32 @@ class _ProductDetailsScreenState
 
                               const SizedBox(height: 10),
 
-                              // Product information badges
+                              // =========================
+                              // PRODUCT BADGES
+                              // =========================
                               Wrap(
                                 spacing: 16,
                                 runSpacing: 8,
                                 children: [
                                   RatingBadge(
                                     icon: Icons.star,
-                                    label: product.rating.rate
+                                    label: product
+                                        .rating.rate
                                         .toString(),
                                   ),
 
                                   RatingBadge(
-                                    icon:
-                                        Icons.reviews_outlined,
+                                    icon: Icons
+                                        .reviews_outlined,
                                     label:
                                         '${product.rating.count} reviews',
                                   ),
 
                                   RatingBadge(
-                                    icon:
-                                        Icons.category_outlined,
-                                    label: product.category
+                                    icon: Icons
+                                        .category_outlined,
+                                    label: product
+                                        .category
                                         .toTitleCase(),
                                   ),
                                 ],
@@ -168,45 +207,65 @@ class _ProductDetailsScreenState
 
                               const SizedBox(height: 20),
 
-                              // Description title
+                              // =========================
+                              // DESCRIPTION TITLE
+                              // =========================
                               Text(
                                 'About this item',
-                                style: AppTextStyles.productTitle
-                                    .copyWith(fontSize: 16),
+                                style: AppTextStyles
+                                    .productTitle
+                                    .copyWith(
+                                  fontSize: 16,
+                                ),
                               ),
 
                               const SizedBox(height: 8),
 
-                              // Description
+                              // =========================
+                              // DESCRIPTION
+                              // =========================
                               Text(
                                 product.description,
-                                style: AppTextStyles.bodyText,
+                                style:
+                                    AppTextStyles.bodyText,
                                 maxLines:
                                     _descriptionExpanded
                                         ? null
                                         : 3,
-                                overflow: _descriptionExpanded
-                                    ? TextOverflow.visible
-                                    : TextOverflow.ellipsis,
+                                overflow:
+                                    _descriptionExpanded
+                                        ? TextOverflow
+                                            .visible
+                                        : TextOverflow
+                                            .ellipsis,
                               ),
 
-                              // Show more / Show less
+                              // =========================
+                              // MORE DETAILS
+                              // =========================
                               GestureDetector(
-                                onTap: () => setState(
-                                  () => _descriptionExpanded =
-                                      !_descriptionExpanded,
-                                ),
+                                onTap: () {
+                                  setState(() {
+                                    _descriptionExpanded =
+                                        !_descriptionExpanded;
+                                  });
+                                },
                                 child: Padding(
                                   padding:
-                                      const EdgeInsets.only(top: 4),
+                                      const EdgeInsets.only(
+                                    top: 4,
+                                  ),
                                   child: Text(
                                     _descriptionExpanded
                                         ? 'Show less'
                                         : 'More details...',
-                                    style: AppTextStyles.bodySmall
+                                    style: AppTextStyles
+                                        .bodySmall
                                         .copyWith(
-                                      color: AppColors.accent,
-                                      fontWeight: FontWeight.w600,
+                                      color:
+                                          AppColors.accent,
+                                      fontWeight:
+                                          FontWeight.w600,
                                     ),
                                   ),
                                 ),
@@ -224,7 +283,9 @@ class _ProductDetailsScreenState
         ),
       ),
 
-      // Bottom bar
+      // =========================
+      // BOTTOM CART BAR
+      // =========================
       bottomNavigationBar: Container(
         color: AppColors.surface,
         padding: const EdgeInsets.fromLTRB(
@@ -237,7 +298,9 @@ class _ProductDetailsScreenState
           top: false,
           child: Row(
             children: [
-              // Total price
+              // =========================
+              // TOTAL PRICE
+              // =========================
               Text(
                 '\$${(product.price * _quantity).toStringAsFixed(2)}',
                 style: AppTextStyles.priceText,
@@ -245,10 +308,13 @@ class _ProductDetailsScreenState
 
               const SizedBox(width: 16),
 
-              // Add to cart button
+              // =========================
+              // ADD TO CART
+              // =========================
               Expanded(
                 child: AppButton(
                   label: 'Add to cart',
+
                   onPressed: () async {
                     await ref
                         .read(cartProvider.notifier)
@@ -277,7 +343,10 @@ class _ProductDetailsScreenState
     );
   }
 
-  // Circular button used for back/favorite
+  // =====================================================
+  // CIRCULAR ICON BUTTON
+  // =====================================================
+
   Widget _circleIconButton({
     required IconData icon,
     required VoidCallback onTap,
@@ -286,10 +355,12 @@ class _ProductDetailsScreenState
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(10),
+
         decoration: const BoxDecoration(
           color: AppColors.surface,
           shape: BoxShape.circle,
         ),
+
         child: Icon(
           icon,
           size: 20,
@@ -299,17 +370,22 @@ class _ProductDetailsScreenState
     );
   }
 
-  // Quantity selector
+  // =====================================================
+  // QUANTITY STEPPER
+  // =====================================================
+
   Widget _quantityStepper() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Decrease quantity
+        // Decrease
         _stepButton(
           icon: Icons.remove,
           onTap: () {
             if (_quantity > 1) {
-              setState(() => _quantity--);
+              setState(() {
+                _quantity--;
+              });
             }
           },
         ),
@@ -326,19 +402,24 @@ class _ProductDetailsScreenState
           ),
         ),
 
-        // Increase quantity
+        // Increase
         _stepButton(
           icon: Icons.add,
           isAccent: true,
           onTap: () {
-            setState(() => _quantity++);
+            setState(() {
+              _quantity++;
+            });
           },
         ),
       ],
     );
   }
 
-  // Quantity +/- button
+  // =====================================================
+  // QUANTITY BUTTON
+  // =====================================================
+
   Widget _stepButton({
     required IconData icon,
     required VoidCallback onTap,
@@ -348,12 +429,14 @@ class _ProductDetailsScreenState
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(6),
+
         decoration: BoxDecoration(
           color: isAccent
               ? AppColors.accent
               : AppColors.background,
           shape: BoxShape.circle,
         ),
+
         child: Icon(
           icon,
           size: 16,
