@@ -39,7 +39,7 @@ class LoginScreen extends ConsumerWidget {
               height: 220,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.accent.withOpacity(0.12),
+                color: AppColors.accent.withValues(alpha:0.12),
               ),
             ),
           ),
@@ -51,7 +51,7 @@ class LoginScreen extends ConsumerWidget {
               height: 160,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(0.05),
+                color: AppColors.primary.withValues(alpha:0.05),
               ),
             ),
           ),
@@ -71,7 +71,7 @@ class LoginScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.25),
+                          color: AppColors.primary.withValues(alpha:0.25),
                           blurRadius: 16,
                           offset: const Offset(0, 8),
                         ),
@@ -83,12 +83,19 @@ class LoginScreen extends ConsumerWidget {
                       size: 28,
                     ),
                   ),
-                  const SizedBox(height: 28),
-                  Text('Welcome back', style: AppTextStyles.headingLarge),
+                  const SizedBox(height: 110),
+                  Center(
+                    child: Text(
+                      'Welcome back',
+                      style: AppTextStyles.headingLarge,
+                    ),
+                  ),
                   const SizedBox(height: 6),
-                  Text(
+                  Center(
+                  child: Text(
                     'Login to continue shopping',
                     style: AppTextStyles.bodyText,
+                  ),
                   ),
                   const SizedBox(height: 36),
                   Container(
@@ -98,7 +105,7 @@ class LoginScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
+                          color: Colors.black.withValues(alpha: 0.06),
                           blurRadius: 24,
                           offset: const Offset(0, 10),
                         ),
