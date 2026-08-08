@@ -55,6 +55,19 @@ class LoginScreen extends ConsumerWidget {
               ),
             ),
           ),
+          Positioned(
+
+            bottom: -70,
+            left: -70,
+            child: Container(
+              width: 200,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: const Color.fromARGB(255, 166, 85, 85).withValues(alpha:0.06),
+              ),
+            ),
+          ),
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
