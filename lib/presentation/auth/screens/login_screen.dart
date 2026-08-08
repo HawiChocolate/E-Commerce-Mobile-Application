@@ -15,7 +15,11 @@ class LoginScreen extends ConsumerWidget {
     ref.listen<AuthState>(authProvider, (previous, next) {
       if (next is AuthError) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.failure.message)),
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppColors.error,
+            content: Text(next.failure.message),
+          ),
         );
       }
     });
@@ -24,36 +28,105 @@ class LoginScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 60),
-              Text('Welcome back', style: AppTextStyles.headingLarge),
-              const SizedBox(height: 8),
-              Text('Login to continue shopping', style: AppTextStyles.bodyText),
-              const SizedBox(height: 40),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: LoginForm(
-                  isLoading: isLoading,
-                  onSubmit: (username, password) {
-                    ref.read(authProvider.notifier).login(
-                          username: username,
-                          password: password,
-                        );
-                  },
-                ),
+      body: Stack(
+        children: [
+          // Decorative soft circle in the background for depth
+          Positioned(
+            top: -60,
+            right: -60,
+            child: Container(
+              width: 220,
+              height: 220,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.accent.withOpacity(0.12),
               ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            top: 40,
+            left: -80,
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.primary.withOpacity(0.05),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 48),
+                  // Brand mark
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.25),
+                          blurRadius: 16,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.shopping_bag_rounded,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  Text('Welcome back', style: AppTextStyles.headingLarge),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Login to continue shopping',
+                    style: AppTextStyles.bodyText,
+                  ),
+                  const SizedBox(height: 36),
+                  Container(
+                    padding: const EdgeInsets.all(22),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          blurRadius: 24,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: LoginForm(
+                      isLoading: isLoading,
+                      onSubmit: (username, password) {
+                        ref.read(authProvider.notifier).login(
+                              username: username,
+                              password: password,
+                            );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Center(
+                    child: Text(
+                      'Test credentials are pre-filled for you',
+                      style: AppTextStyles.bodySmall,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
