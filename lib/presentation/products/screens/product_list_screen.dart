@@ -58,7 +58,7 @@ class ProductListScreen extends ConsumerWidget {
             child: categoriesAsync.when(
               loading: () => const SizedBox.shrink(),
 
-              error: (_, __) =>
+              error: (_, _) =>
                   const SizedBox.shrink(),
 
               data: (categories) {
@@ -74,7 +74,7 @@ class ProductListScreen extends ConsumerWidget {
                   ),
                   itemCount: allCategories.length,
 
-                  separatorBuilder: (_, __) =>
+                  separatorBuilder: (_, _) =>
                       const SizedBox(width: 10),
 
                   itemBuilder: (context, index) {
@@ -160,7 +160,7 @@ class ProductListScreen extends ConsumerWidget {
                     ),
                     mainAxisSpacing: 14,
                     crossAxisSpacing: 14,
-                    childAspectRatio: 0.68,
+                    childAspectRatio: 0.62,
                   ),
 
                   itemCount: products.length,
