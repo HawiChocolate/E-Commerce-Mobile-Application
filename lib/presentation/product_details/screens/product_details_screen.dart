@@ -53,10 +53,12 @@ class _ProductDetailsScreenState
                     icon: Icons.arrow_back,
                     onTap: () => Navigator.of(context).pop(),
                   ),
+
                   Text(
                     'Details',
                     style: AppTextStyles.headingMedium,
                   ),
+
                   _circleIconButton(
                     icon: Icons.favorite_border,
                     onTap: () {},
@@ -65,134 +67,156 @@ class _ProductDetailsScreenState
               ),
             ),
 
+            // Product details content
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: CachedNetworkImage(
-                          imageUrl: product.image,
-                          fit: BoxFit.contain,
-                          placeholder: (context, url) =>
-                              const Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(
-                            Icons.broken_image_outlined,
-                            size: 64,
-                          ),
-                        ),
-                      ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 600,
                     ),
-
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.fromLTRB(
-                        20,
-                        28,
-                        20,
-                        20,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(28),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  product.title,
-                                  style:
-                                      AppTextStyles.headingMedium,
+                    child: Column(
+                      children: [
+                        // Product image
+                        Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: CachedNetworkImage(
+                              imageUrl: product.image,
+                              fit: BoxFit.contain,
+                              placeholder: (context, url) =>
+                                  const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
                                 ),
                               ),
-                              _quantityStepper(),
-                            ],
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          Wrap(
-                            spacing: 16,
-                            runSpacing: 8,
-                            children: [
-                              RatingBadge(
-                                icon: Icons.star,
-                                label:
-                                    product.rating.rate.toString(),
+                              errorWidget:
+                                  (context, url, error) =>
+                                      const Icon(
+                                Icons.broken_image_outlined,
+                                size: 64,
                               ),
-                              RatingBadge(
-                                icon: Icons.reviews_outlined,
-                                label:
-                                    '${product.rating.count} reviews',
-                              ),
-                              RatingBadge(
-                                icon:
-                                    Icons.category_outlined,
-                                label:
-                                    product.category.toTitleCase(),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          Text(
-                            'About this item',
-                            style: AppTextStyles.productTitle
-                                .copyWith(fontSize: 16),
-                          ),
-
-                          const SizedBox(height: 8),
-
-                          Text(
-                            product.description,
-                            style: AppTextStyles.bodyText,
-                            maxLines:
-                                _descriptionExpanded ? null : 3,
-                            overflow: _descriptionExpanded
-                                ? TextOverflow.visible
-                                : TextOverflow.ellipsis,
-                          ),
-
-                          GestureDetector(
-                            onTap: () => setState(
-                              () => _descriptionExpanded =
-                                  !_descriptionExpanded,
                             ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 4),
-                              child: Text(
-                                _descriptionExpanded
-                                    ? 'Show less'
-                                    : 'More details...',
-                                style: AppTextStyles.bodySmall
-                                    .copyWith(
-                                  color: AppColors.accent,
-                                  fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
+                        // Product information
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.fromLTRB(
+                            20,
+                            28,
+                            20,
+                            20,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(28),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: [
+                              // Product title + quantity
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      product.title,
+                                      style:
+                                          AppTextStyles.headingMedium,
+                                    ),
+                                  ),
+
+                                  _quantityStepper(),
+                                ],
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              // Product information badges
+                              Wrap(
+                                spacing: 16,
+                                runSpacing: 8,
+                                children: [
+                                  RatingBadge(
+                                    icon: Icons.star,
+                                    label: product.rating.rate
+                                        .toString(),
+                                  ),
+
+                                  RatingBadge(
+                                    icon:
+                                        Icons.reviews_outlined,
+                                    label:
+                                        '${product.rating.count} reviews',
+                                  ),
+
+                                  RatingBadge(
+                                    icon:
+                                        Icons.category_outlined,
+                                    label: product.category
+                                        .toTitleCase(),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 20),
+
+                              // Description title
+                              Text(
+                                'About this item',
+                                style: AppTextStyles.productTitle
+                                    .copyWith(fontSize: 16),
+                              ),
+
+                              const SizedBox(height: 8),
+
+                              // Description
+                              Text(
+                                product.description,
+                                style: AppTextStyles.bodyText,
+                                maxLines:
+                                    _descriptionExpanded
+                                        ? null
+                                        : 3,
+                                overflow: _descriptionExpanded
+                                    ? TextOverflow.visible
+                                    : TextOverflow.ellipsis,
+                              ),
+
+                              // Show more / Show less
+                              GestureDetector(
+                                onTap: () => setState(
+                                  () => _descriptionExpanded =
+                                      !_descriptionExpanded,
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 4),
+                                  child: Text(
+                                    _descriptionExpanded
+                                        ? 'Show less'
+                                        : 'More details...',
+                                    style: AppTextStyles.bodySmall
+                                        .copyWith(
+                                      color: AppColors.accent,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -213,6 +237,7 @@ class _ProductDetailsScreenState
           top: false,
           child: Row(
             children: [
+              // Total price
               Text(
                 '\$${(product.price * _quantity).toStringAsFixed(2)}',
                 style: AppTextStyles.priceText,
@@ -220,11 +245,10 @@ class _ProductDetailsScreenState
 
               const SizedBox(width: 16),
 
+              // Add to cart button
               Expanded(
                 child: AppButton(
                   label: 'Add to cart',
-
-                  // UPDATED
                   onPressed: () async {
                     await ref
                         .read(cartProvider.notifier)
@@ -253,6 +277,7 @@ class _ProductDetailsScreenState
     );
   }
 
+  // Circular button used for back/favorite
   Widget _circleIconButton({
     required IconData icon,
     required VoidCallback onTap,
@@ -274,10 +299,12 @@ class _ProductDetailsScreenState
     );
   }
 
+  // Quantity selector
   Widget _quantityStepper() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // Decrease quantity
         _stepButton(
           icon: Icons.remove,
           onTap: () {
@@ -288,8 +315,9 @@ class _ProductDetailsScreenState
         ),
 
         Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
           child: Text(
             '$_quantity',
             style: AppTextStyles.productTitle.copyWith(
@@ -298,6 +326,7 @@ class _ProductDetailsScreenState
           ),
         ),
 
+        // Increase quantity
         _stepButton(
           icon: Icons.add,
           isAccent: true,
@@ -309,6 +338,7 @@ class _ProductDetailsScreenState
     );
   }
 
+  // Quantity +/- button
   Widget _stepButton({
     required IconData icon,
     required VoidCallback onTap,
