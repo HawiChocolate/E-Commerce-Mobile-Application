@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/constants/app_theme.dart';
 import 'data/datasources/local/storage_service.dart';
-import 'presentation/products/screens/product_list_screen.dart';
+import 'presentation/common/widgets/main_navigation_shell.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Shop',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const ProductListScreen(),
+      home: const MainNavigationShell(),
     );
   }
 }
